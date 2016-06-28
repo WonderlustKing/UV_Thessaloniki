@@ -6,22 +6,22 @@ import java.util.Date;
  * Created by christos on 26/6/2016.
  */
 public class UvModel {
-    private double value;
-    private int dt;
+    private double data;
+    private String time;
 
-    public double getValue() {
-        return value;
+    public double getData() {
+        return data;
     }
 
-    public void setValue(double value) {
-        this.value = value;
+    public void setData(double value) {
+        this.data = value;
     }
 
-    public int getDate() {
-        return dt;
+    public String getTime() {
+        return time;
     }
 
-    public void setDate(int dt) {
-        this.dt = dt;
+    public void setTime(String time) {
+        this.time = time;
     }
 }

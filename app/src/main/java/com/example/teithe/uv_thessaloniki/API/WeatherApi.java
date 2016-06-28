@@ -11,7 +11,7 @@ import retrofit2.http.GET;
  */
 public interface WeatherApi {
 
-    @GET("air/1.0/uvi/current?lat=40&lon=22&appid=119cffe1b057340d2b98f4cee862f3d4")
+    @GET("v3/uvi/22.7,40.2/current.json?appid=119cffe1b057340d2b98f4cee862f3d4")
     Call<UvModel> getFeed();
 
 }

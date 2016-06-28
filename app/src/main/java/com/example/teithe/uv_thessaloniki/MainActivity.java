@@ -19,6 +19,7 @@ import com.example.teithe.uv_thessaloniki.Model.UvModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,7 +33,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    String URL = "http://api.owm.io/";
+    String URL = "http://api.openweathermap.org/";
     private CardView cardView;
     private TextView date_textview;
     private TextView hour_textview;
@@ -102,17 +103,30 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<UvModel>() {
             @Override
             public void onResponse(Call<UvModel> call, Response<UvModel> response) {
-                SimpleDateFormat sdfDate = new SimpleDateFormat("MM/dd/yyyy");
-                sdfDate.setTimeZone(TimeZone.getTimeZone("Europe/Athens"));
-                String date = sdfDate.format(new Date(response.body().getDate() * 1000L));
-                date_textview.setText(date);
+                String utc = response.body().getTime();
 
-                SimpleDateFormat sdfHour = new SimpleDateFormat("HH:mm");
-                sdfHour.setTimeZone(TimeZone.getTimeZone("Europe/Athens"));
-                String hour = sdfHour.format(new Date(response.body().getDate() * 1000L));
-                hour_textview.setText(hour);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                try {
+                    Date myLocalDate = sdf.parse(utc);
 
-                uvObjInit(response.body().getValue());
+                    DateFormat localDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                    localDateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Athens"));
+
+                    DateFormat localTimeFormat = new SimpleDateFormat("HH:mm");
+                    localTimeFormat.setTimeZone(TimeZone.getTimeZone("Europe/Athens"));
+
+                    String date = localDateFormat.format(myLocalDate);
+                    date_textview.setText(date);
+
+                    String time = localTimeFormat.format(myLocalDate);
+                    hour_textview.setText(time);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
+                uvObjInit(response.body().getData());
             }
 
             @Override
